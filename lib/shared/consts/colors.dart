@@ -44,6 +44,7 @@ class UIColors{
   static const Color cBEB7EB=  Color(0xFFBEB7EB);
   static const Color cEDEBF9=  Color(0xFFEDEBF9);
   static const Color cD9D9D9=  Color(0xFFD9D9D9);
+  static const Color cCECECE=  Color(0xFFCECECE);
 
 
 }
