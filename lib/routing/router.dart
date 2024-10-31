@@ -19,6 +19,10 @@ class AppRouter extends $AppRouter {
             page: UIHomeScreenRoute.page,
             initial: false,
           ),
+          AutoRoute(
+            page: UIMockScreenRoute.page,
+            initial: false,
+          ),
         ]),
       ];
 }

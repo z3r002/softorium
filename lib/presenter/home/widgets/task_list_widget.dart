@@ -3,53 +3,70 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:softoriim/presenter/home/store/home_store.dart';
 import 'package:softoriim/shared/consts/colors.dart';
 
-class UITaskListWidget extends StatelessWidget {
-   UITaskListWidget({super.key, required this.homeStore});
-  final HomeStore homeStore;
-  final TextEditingController newTaskController = TextEditingController();
+class UITaskListWidget extends StatefulWidget {
+  UITaskListWidget(
+      {super.key,
+      required this.homeStore,
+      required this.focusNode,
+      required this.newTaskController});
 
+  final FocusNode focusNode;
+  final HomeStore homeStore;
+  final TextEditingController newTaskController;
+
+  @override
+  State<UITaskListWidget> createState() => _UITaskListWidgetState();
+}
+
+class _UITaskListWidgetState extends State<UITaskListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return  Observer(
-      builder:(_)=>  ListView.builder(
-        itemCount: homeStore.filteredTasks.length + 1, // Используем filteredTasks
+    return Observer(
+      builder: (_) => ListView.builder(
         shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: widget.homeStore.filteredTasks.length + 1,
         itemBuilder: (context, index) {
-          if (index == homeStore.filteredTasks.length) {
-            // Поле для добавления новой задачи
+          if (index == widget.homeStore.filteredTasks.length) {
             return ListTile(
-              leading: Icon(Icons.circle, color:  UIColors.cEDEBF9,),
-
+              leading: Icon(Icons.circle, color: UIColors.cEDEBF9),
               title: TextField(
-                controller: newTaskController,
+                controller: widget.newTaskController,
+                focusNode: widget.focusNode,
                 maxLength: 20,
                 decoration: InputDecoration(
                   hintText: 'Новая задача',
                 ),
                 onSubmitted: (value) {
                   if (value.isNotEmpty) {
-                    homeStore.addTask(value);
-                    newTaskController.clear();
+                    widget.homeStore.addTask(value);
+                    widget.newTaskController.clear();
                   }
                 },
               ),
             );
-          } else if (homeStore.filteredTasks.isNotEmpty) {
-            // Проверка, что список не пустой
-            final task = homeStore.filteredTasks[index];
+          } else {
+            final task = widget.homeStore.filteredTasks[index];
             return GestureDetector(
               onTap: () {
-                homeStore.selectedTaskIndex = (homeStore.selectedTaskIndex == index) ? null : index;
-                homeStore.tasks = [...homeStore.tasks];
+                widget.homeStore.selectedTaskIndex =
+                    (widget.homeStore.selectedTaskIndex == index)
+                        ? null
+                        : index;
+                widget.homeStore.tasks = [...widget.homeStore.tasks];
               },
-              onLongPress: () => homeStore.toggleTaskCompletion(index),
+              onLongPress: () => widget.homeStore.toggleTaskCompletion(index),
               child: Container(
-                color: homeStore.selectedTaskIndex == index ? UIColors.cEDEBF9 : null,
+                color: widget.homeStore.selectedTaskIndex == index
+                    ? UIColors.cEDEBF9
+                    : null,
                 child: ListTile(
-
-
-                  leading: Icon(Icons.circle, color: task.isCompleted ?  UIColors.cCECECE: UIColors.cEDEBF9,),
+                  leading: Icon(
+                    Icons.circle,
+                    color:
+                        task.isCompleted ? UIColors.cCECECE : UIColors.cEDEBF9,
+                  ),
                   title: Text(
                     task.title,
                     style: TextStyle(
@@ -57,23 +74,30 @@ class UITaskListWidget extends StatelessWidget {
                           ? TextDecoration.lineThrough
                           : TextDecoration.none,
                       color: task.isCompleted ? Colors.grey : Colors.black,
-                      fontWeight: task.isCompleted ? FontWeight.normal : FontWeight.bold,
+                      fontWeight: task.isCompleted
+                          ? FontWeight.normal
+                          : FontWeight.bold,
                     ),
                   ),
-                  trailing: homeStore.selectedTaskIndex == index
+                  trailing: widget.homeStore.selectedTaskIndex == index
                       ? GestureDetector(
-                      onTap: () {
-                        homeStore.removeTask(index);
-                        homeStore.selectedTaskIndex = null;
-                      },
-                      child: Text('Удалить', style: TextStyle(fontSize: 14, decoration: TextDecoration.underline, fontWeight: FontWeight.bold),))
+                          onTap: () {
+                            widget.homeStore.removeTask(index);
+                            widget.homeStore.selectedTaskIndex = null;
+                          },
+                          child: Text(
+                            'Удалить',
+                            style: TextStyle(
+                              fontSize: 14,
+                              decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
                       : null,
                 ),
               ),
             );
-          } else {
-            // Если нет задач в filteredTasks
-            return SizedBox.shrink();
           }
         },
       ),

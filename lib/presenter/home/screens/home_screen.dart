@@ -5,11 +5,11 @@ import 'package:get_it/get_it.dart';
 import 'package:softoriim/presenter/home/store/home_store.dart';
 import 'package:softoriim/presenter/home/widgets/app_bar_widget.dart';
 import 'package:softoriim/presenter/home/widgets/calendar_widget.dart';
+import 'package:softoriim/presenter/home/widgets/task_list_widget.dart';
 import 'package:softoriim/shared/consts/assets.dart';
 import 'package:softoriim/shared/consts/colors.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-
 
 //https://media.istockphoto.com/id/1392783238/ru/%D1%84%D0%BE%D1%82%D0%BE/%D0%BF%D0%BE%D1%80%D1%82%D1%80%D0%B5%D1%82-%D1%83%D0%BB%D1%8B%D0%B1%D0%B0%D1%8E%D1%89%D0%B5%D0%B9%D1%81%D1%8F-%D0%B6%D0%B5%D0%BD%D1%89%D0%B8%D0%BD%D1%8B-%D0%BF%D0%BE%D0%B4%D1%80%D0%BE%D1%81%D1%82%D0%BA%D0%B0-%D1%81%D0%BC%D0%BE%D1%82%D1%80%D1%8F%D1%89%D0%B5%D0%B9-%D0%B2-%D0%BA%D0%B0%D0%BC%D0%B5%D1%80%D1%83-%D0%BD%D0%B0-%D1%81%D0%B8%D0%BD%D0%B5%D0%BC-%D1%84%D0%BE%D0%BD%D0%B5.jpg?s=612x612&w=0&k=20&c=lKnj0o2PabShTGJuiDJFlXHpK4t8PM018fd5kvVIFps=
 
@@ -24,125 +24,112 @@ class UIHomeScreen extends StatefulWidget {
 class _UIHomeScreenState extends State<UIHomeScreen> {
   final HomeStore homeStore = GetIt.I.get<HomeStore>();
   TextEditingController newTaskController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     homeStore.loadTasks();
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        _scrollToTextField();
+      }
+    });
     super.initState();
   }
 
+  @override
+  void dispose() {
+    newTaskController.dispose();
+    _scrollController.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
 
+  void _scrollToTextField() {
+    Future.delayed(Duration(milliseconds: 300), () {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  void _unfocusAndSubmit() {
+    if (_focusNode.hasFocus) {
+      _focusNode.unfocus();
+      final value = newTaskController.text;
+      if (value.isNotEmpty) {
+        homeStore.addTask(value);
+        newTaskController.clear();
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Observer(
-        builder: (_) => Container(
-      padding: EdgeInsets.only(left: 18, right: 18),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            UIColors.cF9F3FC,
-            UIColors.cFAF1E7,
-          ],
-        ),
-      ),
-      child: Column(
-        children: [
-          UIAppBarWidget(),
-
-          Container(
+        builder: (_) => GestureDetector(
+          onTap: _unfocusAndSubmit,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 18),
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(30),
+              gradient: LinearGradient(
+                colors: [UIColors.cF9F3FC, UIColors.cFAF1E7],
+              ),
             ),
-            margin: EdgeInsets.only(top: 20),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                UICalendarWidget(homeStore: homeStore,),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    'План на день ${homeStore.selectedDate.day}.${homeStore.selectedDate.month}.${homeStore.selectedDate.year}',
-                    style:
-                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                ListView.builder(
-                  itemCount: homeStore.filteredTasks.length + 1, // Используем filteredTasks
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    if (index == homeStore.filteredTasks.length) {
-                      // Поле для добавления новой задачи
-                      return ListTile(
-                        leading: Icon(Icons.circle, color:  UIColors.cEDEBF9,),
-
-                        title: TextField(
-                          controller: newTaskController,
-                          maxLength: 20,
-                          decoration: InputDecoration(
-                            hintText: 'Новая задача',
-                          ),
-                          onSubmitted: (value) {
-                            if (value.isNotEmpty) {
-                              homeStore.addTask(value);
-                              newTaskController.clear();
-                            }
-                          },
+                UIAppBarWidget(),
+                Expanded(
+                  child: ListView(
+                    controller: _scrollController,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 1,
+                              blurRadius: 9,
+                              offset: Offset(0, 6),
+                            ),
+                          ],
                         ),
-                      );
-                    } else if (homeStore.filteredTasks.isNotEmpty) {
-                      // Проверка, что список не пустой
-                      final task = homeStore.filteredTasks[index];
-                      return GestureDetector(
-                        onTap: () {
-                          homeStore.selectedTaskIndex = (homeStore.selectedTaskIndex == index) ? null : index;
-                          homeStore.tasks = [...homeStore.tasks];
-                        },
-                        onLongPress: () => homeStore.toggleTaskCompletion(index),
-                        child: Container(
-                          color: homeStore.selectedTaskIndex == index ? UIColors.cEDEBF9 : null,
-                          child: ListTile(
-
-
-                            leading: Icon(Icons.circle, color: task.isCompleted ?  UIColors.cCECECE: UIColors.cEDEBF9,),
-                            title: Text(
-                              task.title,
-                              style: TextStyle(
-                                decoration: task.isCompleted
-                                    ? TextDecoration.lineThrough
-                                    : TextDecoration.none,
-                                color: task.isCompleted ? Colors.grey : Colors.black,
-                                fontWeight: task.isCompleted ? FontWeight.normal : FontWeight.bold,
+                        margin: EdgeInsets.only(top: 20),
+                        child: Column(
+                          children: [
+                            UICalendarWidget(homeStore: homeStore),
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text(
+                                'План на день ${homeStore.selectedDate.day}.${homeStore.selectedDate.month}.${homeStore.selectedDate.year}',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                            trailing: homeStore.selectedTaskIndex == index
-                                ? GestureDetector(
-                                onTap: () {
-                                  homeStore.removeTask(index);
-                                  homeStore.selectedTaskIndex = null;
-                                },
-                                child: Text('Удалить', style: TextStyle(fontSize: 14, decoration: TextDecoration.underline, fontWeight: FontWeight.bold),))
-                                : null,
-                          ),
+                            UITaskListWidget(
+                              homeStore: homeStore,
+                              focusNode: _focusNode,
+                              newTaskController: newTaskController,
+                            )
+                          ],
                         ),
-                      );
-                    } else {
-                      // Если нет задач в filteredTasks
-                      return SizedBox.shrink();
-                    }
-                  },
-                )
-
-
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
-        ],
+        ),
       ),
-    ),
-    ),);
+    );
   }
 }

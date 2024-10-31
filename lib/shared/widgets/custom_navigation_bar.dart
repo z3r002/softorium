@@ -20,10 +20,10 @@ class _UIBottomNavigationBarState extends State<UIBottomNavigationBar> {
     return AutoTabsRouter(
       routes: [
         UIHomeScreenRoute(),
-        UIHomeScreenRoute(),
-        UIHomeScreenRoute(),
-        UIHomeScreenRoute(),
-        UIHomeScreenRoute(),
+       UIMockScreenRoute(title: 'Документы'),
+       UIMockScreenRoute(title: 'Аналитика'),
+       UIMockScreenRoute(title: 'Настройки'),
+       UIMockScreenRoute(title: 'Профиль'),
       ],
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
@@ -109,8 +109,8 @@ class _UIBottomNavigationBarState extends State<UIBottomNavigationBar> {
 
       label: '',
       activeIcon: Container(
-        padding: EdgeInsets.all(15), // Уменьшите padding для сужения
-        child: SvgPicture.asset(icon, width: 24), // Измените ширину иконки
+        padding: EdgeInsets.all(15),
+        child: SvgPicture.asset(icon, width: 24),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: UIColors.cBEB7EB,
