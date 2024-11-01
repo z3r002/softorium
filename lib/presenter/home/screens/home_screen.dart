@@ -47,10 +47,10 @@ class _UIHomeScreenState extends State<UIHomeScreen> {
   }
 
   void _scrollToTextField() {
-    Future.delayed(Duration(milliseconds: 300), () {
+    Future.delayed(const Duration(milliseconds: 300), () {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     });
@@ -74,15 +74,15 @@ class _UIHomeScreenState extends State<UIHomeScreen> {
         builder: (_) => GestureDetector(
           onTap: _unfocusAndSubmit,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 18),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [UIColors.cF9F3FC, UIColors.cFAF1E7],
               ),
             ),
             child: Column(
               children: [
-                UIAppBarWidget(),
+                const UIAppBarWidget(),
                 Expanded(
                   child: ListView(
                     controller: _scrollController,
@@ -96,11 +96,11 @@ class _UIHomeScreenState extends State<UIHomeScreen> {
                               color: Colors.grey.withOpacity(0.5),
                               spreadRadius: 1,
                               blurRadius: 9,
-                              offset: Offset(0, 6),
+                              offset: const Offset(0, 6),
                             ),
                           ],
                         ),
-                        margin: EdgeInsets.only(top: 20),
+                        margin: const EdgeInsets.only(top: 20),
                         child: Column(
                           children: [
                             UICalendarWidget(homeStore: homeStore),
@@ -108,7 +108,7 @@ class _UIHomeScreenState extends State<UIHomeScreen> {
                               padding: const EdgeInsets.all(16.0),
                               child: Text(
                                 'План на день ${homeStore.selectedDate.day}.${homeStore.selectedDate.month}.${homeStore.selectedDate.year}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),

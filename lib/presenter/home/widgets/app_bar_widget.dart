@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:softoriim/shared/consts/assets.dart';
 
 class UIAppBarWidget extends StatelessWidget {
   const UIAppBarWidget({super.key});
@@ -14,10 +16,15 @@ class UIAppBarWidget extends StatelessWidget {
         style: TextStyle(fontWeight: FontWeight.w700),
       ),
       actions: [
-        CircleAvatar(
-          radius: 24,
-          backgroundImage: NetworkImage(''),
-        ),
+        Container(
+          width: 50,
+          height: 50,
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+          ),
+          child:  Image.asset(Assets.woman),
+        )
       ],
     );
   }

@@ -74,6 +74,7 @@ abstract class _HomeStore with Store {
   @action
   // Отметка задачи как выполненной
   void toggleTaskCompletion(int index) {
+    print(index);
     tasks[index].isCompleted = !tasks[index].isCompleted;
     tasks = [...tasks];
     saveTasks();

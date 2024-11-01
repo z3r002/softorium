@@ -20,6 +20,7 @@ class UITaskListWidget extends StatefulWidget {
 
 class _UITaskListWidgetState extends State<UITaskListWidget> {
 
+
   @override
   Widget build(BuildContext context) {
     return Observer(
@@ -48,24 +49,23 @@ class _UITaskListWidgetState extends State<UITaskListWidget> {
             );
           } else {
             final task = widget.homeStore.filteredTasks[index];
+            final isSelected = widget.homeStore.selectedTaskIndex == index;
+
             return GestureDetector(
               onTap: () {
-                widget.homeStore.selectedTaskIndex =
-                    (widget.homeStore.selectedTaskIndex == index)
-                        ? null
-                        : index;
-                widget.homeStore.tasks = [...widget.homeStore.tasks];
+                  widget.homeStore.selectedTaskIndex =
+                  isSelected ? null : index;
+                  widget.homeStore.tasks = [...widget.homeStore.tasks];
               },
               onLongPress: () => widget.homeStore.toggleTaskCompletion(index),
-              child: Container(
-                color: widget.homeStore.selectedTaskIndex == index
-                    ? UIColors.cEDEBF9
-                    : null,
+              child: AnimatedContainer(
+                curve: Curves.easeInOutCirc,
+                duration: Duration(milliseconds: 600),
+                color: isSelected ? UIColors.cEDEBF9 : Colors.transparent,
                 child: ListTile(
                   leading: Icon(
                     Icons.circle,
-                    color:
-                        task.isCompleted ? UIColors.cCECECE : UIColors.cEDEBF9,
+                    color: task.isCompleted ? UIColors.cCECECE : UIColors.cEDEBF9,
                   ),
                   title: Text(
                     task.title,
@@ -79,21 +79,21 @@ class _UITaskListWidgetState extends State<UITaskListWidget> {
                           : FontWeight.bold,
                     ),
                   ),
-                  trailing: widget.homeStore.selectedTaskIndex == index
+                  trailing: isSelected
                       ? GestureDetector(
-                          onTap: () {
-                            widget.homeStore.removeTask(index);
-                            widget.homeStore.selectedTaskIndex = null;
-                          },
-                          child: Text(
-                            'Удалить',
-                            style: TextStyle(
-                              fontSize: 14,
-                              decoration: TextDecoration.underline,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        )
+                    onTap: () {
+                      widget.homeStore.removeTask(index);
+                      widget.homeStore.selectedTaskIndex = null;
+                    },
+                    child: Text(
+                      'Удалить',
+                      style: TextStyle(
+                        fontSize: 14,
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
                       : null,
                 ),
               ),

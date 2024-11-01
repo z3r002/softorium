@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:softoriim/presenter/home/store/home_store.dart';
-import 'package:softoriim/shared/consts/assets.dart';
 import 'package:softoriim/shared/consts/colors.dart';
 
 class UICalendarWidget extends StatelessWidget {
@@ -34,19 +33,27 @@ class UICalendarWidget extends StatelessWidget {
 
             return GestureDetector(
               onTap: () {
-                homeStore.selectedDate = date;
-                homeStore.tasks= [...homeStore.tasks];
+                  homeStore.selectedDate = date;
+                  homeStore.tasks = [...homeStore.tasks];
               },
-              child: Container(
-                height: 30,
-                width: 40,
-                // Reduced width for compact appearance
-                margin: const EdgeInsets.symmetric(
-                    horizontal: 5, vertical: 10),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                height: isSelected ? 40 : 30,
+                width: isSelected ? 50 : 40,
+                margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                 decoration: BoxDecoration(
-                  color:
-                  isSelected ? UIColors.cBEB7EB : Colors.white,
+                  color: isSelected ? UIColors.cBEB7EB : Colors.white,
                   borderRadius: BorderRadius.circular(30),
+                  boxShadow: isSelected
+                      ? [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 8,
+                      offset: Offset(0, 4),
+                    ),
+                  ]
+                      : [],
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 5, bottom: 5),
@@ -59,25 +66,19 @@ class UICalendarWidget extends StatelessWidget {
                           child: Icon(
                             Icons.circle,
                             size: 6,
-                            color: UIColors.cD9D9D9, // Цвет точки
+                            color: UIColors.cD9D9D9,
                           ),
                         ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          const SizedBox(height: 10),
                           Text(
                             '${date.day}',
                             style: TextStyle(
                               fontSize: 15,
-                              fontWeight: isSelected
-                                  ?  FontWeight.normal
-                                  :FontWeight.bold,
-                              color: isSelected
-                                  ? UIColors.white
-                                  : Colors.black,
+                              fontWeight: isSelected ? FontWeight.normal : FontWeight.bold,
+                              color: isSelected ? UIColors.white : Colors.black,
                             ),
                           ),
                           const Spacer(),
@@ -85,9 +86,7 @@ class UICalendarWidget extends StatelessWidget {
                             homeStore.getDayOfWeek(date),
                             style: TextStyle(
                               fontSize: 13,
-                              color: isSelected
-                                  ? UIColors.white
-                                  : Colors.black54,
+                              color: isSelected ? UIColors.white : Colors.black54,
                             ),
                           ),
                         ],

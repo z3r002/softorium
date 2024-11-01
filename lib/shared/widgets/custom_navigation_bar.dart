@@ -41,60 +41,62 @@ class _UIBottomNavigationBarState extends State<UIBottomNavigationBar> {
             SystemNavigator.pop();
             return false;
           },
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  UIColors.cF9F3FC,
-                  UIColors.cFAF1E7,
-                ],
+          child:  Scaffold(
+            extendBody: true, // Распространит градиент под навигационную панель
+            body: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    UIColors.cF9F3FC,
+                    UIColors.cFAF1E7,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
-            ),
-            child: Scaffold(
-              body: PageView(
+              child: PageView(
                 controller: pageController,
                 onPageChanged: (index) {
                   tabsRouter.setActiveIndex(index);
                 },
                 children: tabsRouter.stack.map((page) => page.child).toList(),
               ),
-              bottomNavigationBar: Padding(
-                padding: const EdgeInsets.only(bottom: 10.0), // Уменьшите отступ для сужения
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(99),
-                  ),
-                  child: Theme(
-                     data: Theme.of(context).copyWith(
+            ),
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(99),
+                ),
+                child: Theme(
+                  data: Theme.of(context).copyWith(
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                   ),
-                    child: BottomNavigationBar(
-                      elevation: 0,
-                      backgroundColor: Colors.transparent,
-                      type: BottomNavigationBarType.fixed,
-                      items: [
-                        UIItemBar(Assets.home),
-                        UIItemBar(Assets.cards),
-                        UIItemBar(Assets.chart),
-                        UIItemBar(Assets.notification),
-                        UIItemBar(Assets.notification),
-                      ],
-                      currentIndex: tabsRouter.activeIndex,
-                      selectedItemColor: Colors.purple,
-                      unselectedItemColor: Colors.black54,
-                      onTap: (index) {
-                        tabsRouter.setActiveIndex(index);
-                        pageController.jumpToPage(index);
-                      },
-                      showSelectedLabels: false,
-                      showUnselectedLabels: false,
-                      enableFeedback: false, 
-                    
-                    ),
-                  )
+                  child: BottomNavigationBar(
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                    type: BottomNavigationBarType.fixed,
+                    items: [
+                      UIItemBar(Assets.home),
+                      UIItemBar(Assets.cards),
+                      UIItemBar(Assets.chart),
+                      UIItemBar(Assets.notification),
+                      UIItemBar(Assets.notification),
+                    ],
+                    currentIndex: tabsRouter.activeIndex,
+                    selectedItemColor: Colors.purple,
+                    unselectedItemColor: Colors.black54,
+                    onTap: (index) {
+                      tabsRouter.setActiveIndex(index);
+                      pageController.jumpToPage(index);
+                    },
+                    showSelectedLabels: false,
+                    showUnselectedLabels: false,
+                    enableFeedback: false,
+                  ),
                 ),
               ),
             ),
