@@ -33,7 +33,9 @@ class UICalendarWidget extends StatelessWidget {
 
             return GestureDetector(
               onTap: () {
-                  homeStore.selectedDate = date;
+                homeStore.selectDate(date);
+                 // homeStore.selectedDate = date;
+                  print(homeStore.selectedDate);
                   homeStore.tasks = [...homeStore.tasks];
               },
               child: AnimatedContainer(

@@ -3,6 +3,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:softoriim/presenter/home/store/home_store.dart';
 import 'package:softoriim/shared/consts/colors.dart';
 
+import '../../../data/dtos/task_dto.dart';
+
 class UITaskListWidget extends StatefulWidget {
   UITaskListWidget(
       {super.key,
@@ -48,14 +50,14 @@ class _UITaskListWidgetState extends State<UITaskListWidget> {
               ),
             );
           } else {
-            final task = widget.homeStore.filteredTasks[index];
+            Task task = widget.homeStore.filteredTasks[index];
             final isSelected = widget.homeStore.selectedTaskIndex == index;
 
             return GestureDetector(
               onTap: () {
-                  widget.homeStore.selectedTaskIndex =
-                  isSelected ? null : index;
-                  widget.homeStore.tasks = [...widget.homeStore.tasks];
+                task = widget.homeStore.filteredTasks[index];
+                widget.homeStore.selectedTaskIndex = isSelected ? null : index;
+                widget.homeStore.tasks = [...widget.homeStore.tasks];
               },
               onLongPress: () => widget.homeStore.toggleTaskCompletion(index),
               child: AnimatedContainer(
@@ -102,5 +104,4 @@ class _UITaskListWidgetState extends State<UITaskListWidget> {
         },
       ),
     );
-  }
-}
+}}

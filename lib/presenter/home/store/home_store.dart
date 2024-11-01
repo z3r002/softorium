@@ -27,7 +27,6 @@ abstract class _HomeStore with Store {
   }
 
   @action
-  // Загрузка списка задач
   Future<void> loadTasks() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? tasksJson = prefs.getString('tasks');
@@ -38,24 +37,20 @@ abstract class _HomeStore with Store {
   }
 
   @action
-  // Сохранение списка задач
   Future<void> saveTasks() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<Map<String, dynamic>> jsonList =
-        tasks.map((task) => task.toJson()).toList();
+    List<Map<String, dynamic>> jsonList = tasks.map((task) => task.toJson()).toList();
     prefs.setString('tasks', json.encode(jsonList));
   }
 
   @action
-  // Добавление задачи
   void addTask(String title) {
     tasks.add(Task(title: title, taskDate: selectedDate));
     tasks = [...tasks];
-
     saveTasks();
   }
 
-// Обновление списка задач по выбранной дате
+  @computed
   List<Task> get filteredTasks => tasks.where((task) =>
   task.taskDate?.year == selectedDate.year &&
       task.taskDate?.month == selectedDate.month &&
@@ -63,20 +58,25 @@ abstract class _HomeStore with Store {
   ).toList();
 
   @action
-  // Удаление задачи
   void removeTask(int index) {
-    tasks.removeAt(index);
+    // Удаляем задачу из отфильтрованного списка для текущей даты
+    final taskToRemove = filteredTasks[index];
+    tasks.removeWhere((task) => task == taskToRemove);
     saveTasks();
     tasks = [...tasks];
-
+  }
+  @action
+  void toggleTaskCompletion(int index) {
+    // Меняем статус выполнения задачи в отфильтрованном списке для текущей даты
+    final taskToToggle = filteredTasks[index];
+    taskToToggle.isCompleted = !taskToToggle.isCompleted;
+    tasks = [...tasks];
+    saveTasks();
   }
 
   @action
-  // Отметка задачи как выполненной
-  void toggleTaskCompletion(int index) {
-    print(index);
-    tasks[index].isCompleted = !tasks[index].isCompleted;
-    tasks = [...tasks];
-    saveTasks();
+  void selectDate(DateTime date) {
+    selectedDate = date;
+    tasks = [...tasks]; // Обновляем список, чтобы отобразить задачи для выбранной даты
   }
 }

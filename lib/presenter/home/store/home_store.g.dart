@@ -9,6 +9,14 @@ part of 'home_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$HomeStore on _HomeStore, Store {
+  Computed<List<Task>>? _$filteredTasksComputed;
+
+  @override
+  List<Task> get filteredTasks => (_$filteredTasksComputed ??=
+          Computed<List<Task>>(() => super.filteredTasks,
+              name: '_HomeStore.filteredTasks'))
+      .value;
+
   late final _$startDateAtom =
       Atom(name: '_HomeStore.startDate', context: context);
 
@@ -151,13 +159,25 @@ mixin _$HomeStore on _HomeStore, Store {
   }
 
   @override
+  void selectDate(DateTime date) {
+    final _$actionInfo =
+        _$_HomeStoreActionController.startAction(name: '_HomeStore.selectDate');
+    try {
+      return super.selectDate(date);
+    } finally {
+      _$_HomeStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 startDate: ${startDate},
 endDate: ${endDate},
 selectedDate: ${selectedDate},
 tasks: ${tasks},
-selectedTaskIndex: ${selectedTaskIndex}
+selectedTaskIndex: ${selectedTaskIndex},
+filteredTasks: ${filteredTasks}
     ''';
   }
 }
