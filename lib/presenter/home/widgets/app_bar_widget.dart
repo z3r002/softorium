@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:softoriim/shared/consts/assets.dart';
 
 class UIAppBarWidget extends StatelessWidget {
@@ -11,7 +10,7 @@ class UIAppBarWidget extends StatelessWidget {
       backgroundColor: Colors.transparent,
       elevation: 0,
       excludeHeaderSemantics: true,
-      title: Text(
+      title: const Text(
         'Привет, John Doe',
         style: TextStyle(fontWeight: FontWeight.w700),
       ),
@@ -20,10 +19,10 @@ class UIAppBarWidget extends StatelessWidget {
           width: 50,
           height: 50,
           clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
           ),
-          child:  Image.asset(Assets.woman),
+          child: Image.asset(Assets.woman),
         )
       ],
     );

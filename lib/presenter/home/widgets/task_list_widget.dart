@@ -40,6 +40,7 @@ class _UITaskListWidgetState extends State<UITaskListWidget> {
                 maxLength: 20,
                 decoration: InputDecoration(
                   hintText: 'Новая задача',
+                    counterText: ""
                 ),
                 onSubmitted: (value) {
                   if (value.isNotEmpty) {

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:softoriim/data/dtos/task_dto.dart';
+import 'package:softoriim/utils/task_storage_helper.dart';
 
 part 'home_store.g.dart';
 
@@ -20,6 +21,12 @@ abstract class _HomeStore with Store {
   @observable
   int? selectedTaskIndex;
 
+  final TaskStorageHelper storageHelper = TaskStorageHelper();
+
+  _HomeStore() {
+    loadTasks();
+  }
+
   @action
   String getDayOfWeek(DateTime date) {
     const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
@@ -28,19 +35,12 @@ abstract class _HomeStore with Store {
 
   @action
   Future<void> loadTasks() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? tasksJson = prefs.getString('tasks');
-    if (tasksJson != null) {
-      List<dynamic> jsonList = json.decode(tasksJson);
-      tasks = jsonList.map((json) => Task.fromJson(json)).toList();
-    }
+    tasks = await storageHelper.loadTasks();
   }
 
   @action
   Future<void> saveTasks() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<Map<String, dynamic>> jsonList = tasks.map((task) => task.toJson()).toList();
-    prefs.setString('tasks', json.encode(jsonList));
+    await storageHelper.saveTasks(tasks);
   }
 
   @action
@@ -59,15 +59,14 @@ abstract class _HomeStore with Store {
 
   @action
   void removeTask(int index) {
-    // Удаляем задачу из отфильтрованного списка для текущей даты
     final taskToRemove = filteredTasks[index];
-    tasks.removeWhere((task) => task == taskToRemove);
-    saveTasks();
+    tasks.remove(taskToRemove);
     tasks = [...tasks];
+    saveTasks();
   }
+
   @action
   void toggleTaskCompletion(int index) {
-    // Меняем статус выполнения задачи в отфильтрованном списке для текущей даты
     final taskToToggle = filteredTasks[index];
     taskToToggle.isCompleted = !taskToToggle.isCompleted;
     tasks = [...tasks];
@@ -77,6 +76,6 @@ abstract class _HomeStore with Store {
   @action
   void selectDate(DateTime date) {
     selectedDate = date;
-    tasks = [...tasks]; // Обновляем список, чтобы отобразить задачи для выбранной даты
   }
 }
+

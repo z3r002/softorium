@@ -6,7 +6,7 @@ import 'package:softoriim/shared/consts/global.dart';
 
 @RoutePage()
 class UISplashScreen extends StatefulWidget {
-  const UISplashScreen({Key? key}) : super(key: key);
+  const UISplashScreen({super.key});
 
   @override
   State<UISplashScreen> createState() => _UISplashScreenState();

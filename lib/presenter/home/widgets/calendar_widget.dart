@@ -5,12 +5,13 @@ import 'package:softoriim/shared/consts/colors.dart';
 
 class UICalendarWidget extends StatelessWidget {
   const UICalendarWidget({super.key, required this.homeStore});
+
   final HomeStore homeStore;
 
   @override
   Widget build(BuildContext context) {
     return Observer(
-      builder:(_)=> Container(
+      builder: (_) => Container(
         height: 80,
         padding: const EdgeInsets.symmetric(horizontal: 5),
         decoration: const BoxDecoration(
@@ -21,7 +22,8 @@ class UICalendarWidget extends StatelessWidget {
             )),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: homeStore.endDate.difference(homeStore.startDate).inDays + 1,
+          itemCount:
+              homeStore.endDate.difference(homeStore.startDate).inDays + 1,
           itemBuilder: (context, index) {
             final date = homeStore.startDate.add(Duration(days: index));
             final isSelected = date.day == homeStore.selectedDate.day &&
@@ -34,9 +36,7 @@ class UICalendarWidget extends StatelessWidget {
             return GestureDetector(
               onTap: () {
                 homeStore.selectDate(date);
-                 // homeStore.selectedDate = date;
-                  print(homeStore.selectedDate);
-                  homeStore.tasks = [...homeStore.tasks];
+                homeStore.tasks = [...homeStore.tasks];
               },
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
@@ -49,12 +49,12 @@ class UICalendarWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                   boxShadow: isSelected
                       ? [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 8,
-                      offset: Offset(0, 4),
-                    ),
-                  ]
+                          const BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 8,
+                            offset: Offset(0, 4),
+                          ),
+                        ]
                       : [],
                 ),
                 child: Padding(
@@ -79,7 +79,9 @@ class UICalendarWidget extends StatelessWidget {
                             '${date.day}',
                             style: TextStyle(
                               fontSize: 15,
-                              fontWeight: isSelected ? FontWeight.normal : FontWeight.bold,
+                              fontWeight: isSelected
+                                  ? FontWeight.normal
+                                  : FontWeight.bold,
                               color: isSelected ? UIColors.white : Colors.black,
                             ),
                           ),
@@ -88,7 +90,8 @@ class UICalendarWidget extends StatelessWidget {
                             homeStore.getDayOfWeek(date),
                             style: TextStyle(
                               fontSize: 13,
-                              color: isSelected ? UIColors.white : Colors.black54,
+                              color:
+                                  isSelected ? UIColors.white : Colors.black54,
                             ),
                           ),
                         ],

@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:softoriim/presenter/home/store/home_store.dart';
 import 'package:softoriim/shared/consts/global.dart';
-import 'package:softoriim/utils/pref_util.dart';
 import 'package:get_it/get_it.dart';
-
-
 
 Future<void> main() async {
   runZonedGuarded(() async {
@@ -19,17 +16,14 @@ Future<void> main() async {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-    await PrefUtil.init();
     GetIt.I.registerSingleton<HomeStore>(HomeStore());
-
 
     runApp(EasyLocalization(
         supportedLocales: [Locale('ru'), Locale('en')],
         path: 'assets/translations',
         fallbackLocale: Locale('en'),
         child: MyApp()));
-  }, (exception, stackTrace) async {
-  });
+  }, (exception, stackTrace) async {});
 }
 
 class MyApp extends StatefulWidget {
