@@ -1,3 +1,17 @@
 {
-  "math": "Тест"
+  "hi": "Привет, {name}",
+  "delete": "Удалить",
+  "new_task": "Новая задача",
+  "the_plan_for_the_day": "План на день: {day}.{month}.{year}",
+  "days": {
+
+  "days_of_week_0": "Пн",
+  "days_of_week_1": "Вт",
+  "days_of_week_2": "Ср",
+  "days_of_week_3": "Чт",
+  "days_of_week_4": "Пт",
+  "days_of_week_5": "Сб",
+  "days_of_week_6": "Вс"
+
+  }
 }

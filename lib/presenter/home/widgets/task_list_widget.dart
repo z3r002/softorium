@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:softoriim/presenter/home/store/home_store.dart';
@@ -39,7 +40,7 @@ class _UITaskListWidgetState extends State<UITaskListWidget> {
                 focusNode: widget.focusNode,
                 maxLength: 20,
                 decoration: InputDecoration(
-                  hintText: 'Новая задача',
+                  hintText: 'new_task'.tr(),
                     counterText: ""
                 ),
                 onSubmitted: (value) {
@@ -89,7 +90,7 @@ class _UITaskListWidgetState extends State<UITaskListWidget> {
                       widget.homeStore.selectedTaskIndex = null;
                     },
                     child: Text(
-                      'Удалить',
+                      'delete'.tr(),
                       style: TextStyle(
                         fontSize: 14,
                         decoration: TextDecoration.underline,

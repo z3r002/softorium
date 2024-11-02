@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:softoriim/presenter/home/store/home_store.dart';
+import 'package:softoriim/utils/task_storage_helper.dart';
 
 class MockSharedPreferences extends Mock implements SharedPreferences {}
 
@@ -11,11 +12,12 @@ void main() {
   late HomeStore homeStore;
   late MockSharedPreferences mockPrefs;
 
-  setUp(() {
+  setUp(() async {
    TestWidgetsFlutterBinding.ensureInitialized();
 
-    mockPrefs = MockSharedPreferences();
-    homeStore = HomeStore();
+
+   mockPrefs = MockSharedPreferences();
+    homeStore = HomeStore(TaskStorageHelper(mockPrefs));
   });
 
   group('HomeStore', () {

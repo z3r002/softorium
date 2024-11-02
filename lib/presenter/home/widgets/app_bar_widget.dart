@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:softoriim/shared/consts/assets.dart';
 
@@ -10,9 +11,9 @@ class UIAppBarWidget extends StatelessWidget {
       backgroundColor: Colors.transparent,
       elevation: 0,
       excludeHeaderSemantics: true,
-      title: const Text(
-        'Привет, John Doe',
-        style: TextStyle(fontWeight: FontWeight.w700),
+      title:  Text(
+        'hi'.tr(namedArgs: {'name': 'John Doe'}),
+        style: const TextStyle(fontWeight: FontWeight.w700),
       ),
       actions: [
         Container(

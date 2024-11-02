@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:softoriim/data/dtos/task_dto.dart';
@@ -21,15 +22,24 @@ abstract class _HomeStore with Store {
   @observable
   int? selectedTaskIndex;
 
-  final TaskStorageHelper storageHelper = TaskStorageHelper();
+  final TaskStorageHelper storageHelper;
 
-  _HomeStore() {
+
+  _HomeStore(this.storageHelper) {
     loadTasks();
   }
 
   @action
   String getDayOfWeek(DateTime date) {
-    const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    List<String> days = [
+      'days.days_of_week_0'.tr(),
+      'days.days_of_week_1'.tr(),
+      'days.days_of_week_2'.tr(),
+      'days.days_of_week_3'.tr(),
+      'days.days_of_week_4'.tr(),
+      'days.days_of_week_5'.tr(),
+      'days.days_of_week_6'.tr(),
+    ];
     return days[date.weekday - 1];
   }
 

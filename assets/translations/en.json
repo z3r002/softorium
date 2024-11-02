@@ -1,3 +1,15 @@
 {
-  "test": "test"
+  "hi": "Hi, {name}",
+  "delete": "delete",
+  "new_task": "New task",
+  "the_plan_for_the_day": "The plan for the day: {day}.{month}.{year}",
+  "days": {
+    "days_of_week_0": "Mon",
+    "days_of_week_1": "Tue",
+    "days_of_week_2": "Wed",
+    "days_of_week_3": "Thu",
+    "days_of_week_4": "Fri",
+    "days_of_week_5": "Sat",
+    "days_of_week_6": "Sun"
+  }
 }
