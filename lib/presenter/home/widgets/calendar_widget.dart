@@ -13,12 +13,11 @@ class UICalendarWidget extends StatelessWidget {
     return Observer(
       builder: (_) => Container(
         height: 80,
-        padding: const EdgeInsets.symmetric(horizontal: 5),
         decoration: const BoxDecoration(
             color: UIColors.cEDEBF9,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
             )),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
@@ -43,7 +42,7 @@ class UICalendarWidget extends StatelessWidget {
                 curve: Curves.easeInOut,
                 height: isSelected ? 40 : 30,
                 width: isSelected ? 50 : 40,
-                margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                 decoration: BoxDecoration(
                   color: isSelected ? UIColors.cBEB7EB : Colors.white,
                   borderRadius: BorderRadius.circular(30),

@@ -1,8 +1,6 @@
-import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mobx/mobx.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:softoriim/data/dtos/task_dto.dart';
 import 'package:softoriim/utils/task_storage_helper.dart';
 
@@ -24,23 +22,13 @@ abstract class _HomeStore with Store {
 
   final TaskStorageHelper storageHelper;
 
-
   _HomeStore(this.storageHelper) {
     loadTasks();
   }
 
   @action
   String getDayOfWeek(DateTime date) {
-    List<String> days = [
-      'days.days_of_week_0'.tr(),
-      'days.days_of_week_1'.tr(),
-      'days.days_of_week_2'.tr(),
-      'days.days_of_week_3'.tr(),
-      'days.days_of_week_4'.tr(),
-      'days.days_of_week_5'.tr(),
-      'days.days_of_week_6'.tr(),
-    ];
-    return days[date.weekday - 1];
+    return 'days.days_of_week_${date.weekday - 1}'.tr();
   }
 
   @action
@@ -55,8 +43,10 @@ abstract class _HomeStore with Store {
 
   @action
   void addTask(String title) {
-    tasks.add(Task(title: title, taskDate: selectedDate));
-    tasks = [...tasks];
+    tasks = [
+      ...tasks,
+      Task(title: title, taskDate: selectedDate)
+    ];
     saveTasks();
   }
 
@@ -64,13 +54,11 @@ abstract class _HomeStore with Store {
   List<Task> get filteredTasks => tasks.where((task) =>
   task.taskDate?.year == selectedDate.year &&
       task.taskDate?.month == selectedDate.month &&
-      task.taskDate?.day == selectedDate.day
-  ).toList();
+      task.taskDate?.day == selectedDate.day).toList();
 
   @action
   void removeTask(int index) {
-    final taskToRemove = filteredTasks[index];
-    tasks.remove(taskToRemove);
+    tasks.remove(filteredTasks[index]);
     tasks = [...tasks];
     saveTasks();
   }
@@ -88,4 +76,5 @@ abstract class _HomeStore with Store {
     selectedDate = date;
   }
 }
+
 

@@ -1,13 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:softoriim/data/dtos/task_dto.dart';
 import 'package:softoriim/presenter/home/store/home_store.dart';
 import 'package:softoriim/shared/consts/colors.dart';
 
-import '../../../data/dtos/task_dto.dart';
 
 class UITaskListWidget extends StatefulWidget {
-  UITaskListWidget(
+  const UITaskListWidget(
       {super.key,
       required this.homeStore,
       required this.focusNode,
@@ -29,12 +29,12 @@ class _UITaskListWidgetState extends State<UITaskListWidget> {
     return Observer(
       builder: (_) => ListView.builder(
         shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: widget.homeStore.filteredTasks.length + 1,
         itemBuilder: (context, index) {
           if (index == widget.homeStore.filteredTasks.length) {
             return ListTile(
-              leading: Icon(Icons.circle, color: UIColors.cEDEBF9),
+              leading: const Icon(Icons.circle, color: UIColors.cEDEBF9),
               title: TextField(
                 controller: widget.newTaskController,
                 focusNode: widget.focusNode,
@@ -64,7 +64,7 @@ class _UITaskListWidgetState extends State<UITaskListWidget> {
               onLongPress: () => widget.homeStore.toggleTaskCompletion(index),
               child: AnimatedContainer(
                 curve: Curves.easeInOutCirc,
-                duration: Duration(milliseconds: 600),
+                duration: const Duration(milliseconds: 600),
                 color: isSelected ? UIColors.cEDEBF9 : Colors.transparent,
                 child: ListTile(
                   leading: Icon(
@@ -91,7 +91,7 @@ class _UITaskListWidgetState extends State<UITaskListWidget> {
                     },
                     child: Text(
                       'delete'.tr(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14,
                         decoration: TextDecoration.underline,
                         fontWeight: FontWeight.bold,
